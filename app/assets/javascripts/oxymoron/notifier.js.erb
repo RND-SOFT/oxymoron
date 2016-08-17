@@ -14,7 +14,7 @@ angular.module("oxymoron.notifier", [])
         }
 
         if (res.data.errors) {
-          Validate(res.data.form_name || res.config.data.form_name, res.data.errors)
+          Validate(res.data.form_name || (res.config.data||{}).form_name, res.data.errors)
         }
 
         if (res.data.redirect_to_url) {
