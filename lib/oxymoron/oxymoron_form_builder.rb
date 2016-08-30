@@ -44,7 +44,7 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
       "ng-options" => options["ng-options"] || "#{method}.#{options[:value_method]} as #{method}.#{options[:title_method]} for #{method} in #{options[:collection]}"
     })
 
-    content_tag(:select, nil, options)
+    ActionController::Base.helpers.content_tag(:select, nil, options)
   end
 
   def ng_select2 method, options = {}
@@ -55,7 +55,7 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
       "s2-options" => options["s2-options"] || "#{method}.#{options[:value_method]} as #{method}.#{options[:title_method]} for #{method} in #{options[:collection]}"
     })
 
-    content_tag(:select2, nil, options)
+    ActionController::Base.helpers.content_tag(:select2, nil, options)
   end
 
 
