@@ -85,11 +85,13 @@ module Oxymoron
             current_route_path = route.path.spec.to_s.gsub(/:(\w)+/, '').gsub(/\(.*$/, '').gsub('//', '/')
 
             if (current_route_path.start_with?(base_path))
-              for_hash[route.defaults[:action]] ||= {
-                url: route.path.spec.to_s.gsub('(.:format)', '.json'),
-                isArray: route.defaults[:is_array],
-                method: /GET|POST|PUT|PATCH|DELETE/.match(route.constraints[:request_method].to_s).to_s
-              }
+              route_request_methods(route).each do |meth|
+                for_hash[route.defaults[:action]] ||= {
+                  url: route.path.spec.to_s.gsub('(.:format)', '.json'),
+                  isArray: route.defaults[:is_array],
+                  method: /GET|POST|PUT|PATCH|DELETE/.match(meth.to_s).to_s
+                }
+              end
             end
             
           end
@@ -115,6 +117,10 @@ module Oxymoron
       html = File.open("#{Gem.loaded_specs['oxymoron'].full_gem_path}/app/assets/javascripts/oxymoron/#{asset_name}").read
       template = ERB.new(html, nil, "%")
       template.result(binding)
+    end
+
+    def route_request_methods route
+      route.instance_variable_get("@request_method_match")||[].map{|klass| klass.to_s.split("::").last}
     end
 
     class << self
