@@ -29,7 +29,9 @@ module Oxymoron
         html_options[:multipart] ||= builder.multipart?
         prefix = html_options["ng-submit-prefix"] || options[:prefix] || 'ctrl'
         html_options[:name] ||= object_name
-        html_options["ng-submit"] ||= "formQuery = #{prefix}.save({form_name: '#{html_options[:name]}', id: #{prefix}.#{object_name}.id, #{object_name}: #{prefix}.#{object_name}}); $event.preventDefault();"
+        name = html_options[:name]
+        angular_model = "#{prefix}.#{name}"
+        html_options["ng-submit"] ||= "formQuery = #{prefix}.save({form_name: '#{name}', id: #{angular_model}.id, #{name}: #{angular_model}}); $event.preventDefault();"
 
         html_options = html_options_for_form(options[:url] || {}, html_options)
         form_tag_with_body(html_options, output)
@@ -54,7 +56,9 @@ module Oxymoron
         html_options = options[:html] ||= {}
         html_options[:name] ||= object_name
         prefix = html_options["ng-submit-prefix"] || options[:prefix] || 'ctrl'
-        html_options["ng-submit"] ||= "formQuery = #{prefix}.save({form_name: '#{html_options[:name]}', id: #{prefix}.#{object_name}.id, #{object_name}: #{prefix}.#{object_name}}); $event.preventDefault();"
+        name = html_options[:name]
+        angular_model = "#{prefix}.#{name}"
+        html_options["ng-submit"] ||= "formQuery = #{prefix}.save({form_name: '#{name}', id: #{angular_model}.id, #{name}: #{angular_model}}); $event.preventDefault();"
 
         options[:html].merge!(html_options)
         form_for record, options, &block
