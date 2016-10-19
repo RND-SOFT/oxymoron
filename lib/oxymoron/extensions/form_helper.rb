@@ -66,7 +66,7 @@ module Oxymoron
       end
 
       def oxymoron_modal partial
-        content_tag("script".freeze, render(partial: partial, locals: {'modal_form': true}), type: 'text/ng-template', id: "#{partial}.modal").html_safe
+        content_tag("script".freeze, render(partial: partial, locals: {modal_form: true}), type: 'text/ng-template', id: "#{partial}.modal").html_safe
       end
 
     end
