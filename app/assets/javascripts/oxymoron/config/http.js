@@ -1,4 +1,3 @@
-
 angular.module("oxymoron.config.http", [])
   .config(['$httpProvider', '$locationProvider', '$stateProvider', function($httpProvider, $locationProvider, $stateProvider) {
     /*
@@ -7,3 +6,4 @@ angular.module("oxymoron.config.http", [])
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'AngularXMLHttpRequest';
     $httpProvider.defaults.paramSerializer = '$httpParamSerializerJQLike';
   }])
+
