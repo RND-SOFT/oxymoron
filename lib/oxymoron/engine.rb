@@ -42,7 +42,15 @@ module Oxymoron
       end
 
       def write_assets
-        File.write(File.join(Config.oxymoron_js_path, "oxymoron.js"), Oxymoron.generate("oxymoron.js.erb"))
+        file_path = File.join(Config.oxymoron_js_path, "oxymoron.js")
+
+        File.open(file_path, File::RDWR|File::CREAT, 0644) {|f|
+          f.flock(File::LOCK_EX)
+          f.rewind
+          f.write(Oxymoron.generate("oxymoron.js.erb"))
+          f.flush
+          f.truncate(f.pos)
+        }
       end
   end
 end
