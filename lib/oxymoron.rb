@@ -104,7 +104,7 @@ module Oxymoron
     end
 
     def generate file
-      template = ERB.new File.new(File.expand_path("../../app/assets/javascripts/oxymoron/#{file}", __FILE__)).read, nil, "%"
+      template = ERB.new File.read(File.expand_path("../../app/assets/javascripts/oxymoron/#{file}", __FILE__)), nil, "%"
 
       if Rails.env.production?
         return Uglifier.new.compile(template.result(binding))
@@ -114,7 +114,7 @@ module Oxymoron
     end
 
     def render_oxymoron_assets asset_name
-      html = File.open("#{Gem.loaded_specs['oxymoron'].full_gem_path}/app/assets/javascripts/oxymoron/#{asset_name}").read
+      html = File.read("#{Gem.loaded_specs['oxymoron'].full_gem_path}/app/assets/javascripts/oxymoron/#{asset_name}")
       template = ERB.new(html, nil, "%")
       template.result(binding)
     end
