@@ -104,7 +104,7 @@ module Oxymoron
       template = ERB.new File.read(File.expand_path("../../app/assets/javascripts/oxymoron/#{file}", __FILE__)), nil, "%"
 
       if Rails.env.production?
-        return Uglifier.new.compile(template.result(binding))
+        return Uglifier.new(output: { comments: :all }).compile(template.result(binding))
       else
         return template.result(binding)
       end
