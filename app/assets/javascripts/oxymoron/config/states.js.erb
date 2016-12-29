@@ -28,7 +28,7 @@ angular.module("oxymoron.config.states", [])
           var actionNames = angular.isArray(actionNames) ? actionNames : [actionNames];
           
           if (actionNames.indexOf(action)!=-1) {
-            callback($stateParams);
+            callback(angular.copy($stateParams));
           }
         } catch (e) {
           console.error(e);
@@ -57,7 +57,13 @@ angular.module("oxymoron.config.states", [])
           controller: '<%= value[:controller]%>',
           resolve: {
             action: ['$stateParams', function ($stateParams) {
-              return resolve('<%= value[:action]%>', $stateParams)
+              if ($stateProvider.oxymoron_location) {
+                return resolve('<%= value[:action]%>', angular.merge({}, $stateProvider.oxymoron_location.search(), $stateParams));
+              }
+              else {
+                return resolve('<%= value[:action]%>', $stateParams);
+              }
+              
             }]
           }
         })

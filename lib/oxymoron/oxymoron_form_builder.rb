@@ -22,6 +22,11 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
     super
   end
 
+  def number_field method, options = {}
+    options['ng-model'] = compute_ng_model(method, options)
+    super
+  end
+
   def select method, choices = nil, options = {}, html_options = {}, &block
     html_options['ng-model'] = compute_ng_model(method, html_options)
     super
