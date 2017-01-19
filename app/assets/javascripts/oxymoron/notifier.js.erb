@@ -9,13 +9,17 @@ angular.module("oxymoron.notifier", [])
 
     $rootScope.notify_callback = function(type, res) {
       if (res.data && angular.isObject(res.data)) {
-        if (res.data.msg || res.data.error) {
-          ngNotify.set(res.data.msg || res.data.error, type);
-        }
+        <% if Config.ng_notify %>
+          if (res.data.msg || res.data.error) {
+            ngNotify.set(res.data.msg || res.data.error, type);
+          }
+        <% end %>
 
-        if (res.data.errors) {
-          Validate(res.data.form_name || (res.config.data||{}).form_name, res.data.errors)
-        }
+        <% if Config.form_validate %>
+          if (res.data.errors) {
+            Validate(res.data.form_name || (res.config.data||{}).form_name, res.data.errors)
+          }
+        <% end %>
 
         if (res.data.redirect_to_url) {
       		console.log("Redirect to: " + res.data.redirect_to_url)
