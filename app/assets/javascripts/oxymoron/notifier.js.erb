@@ -1,5 +1,5 @@
 angular.module("oxymoron.notifier", [])
-  .run(['$rootScope', 'ngNotify', 'Validate', '$state', '$http', '$location', function ($rootScope, ngNotify, Validate, $state, $http, $location) {
+  .run(['$rootScope', 'ngNotify', 'Validate', '$state', '$http', '$location', '$timeout', function ($rootScope, ngNotify, Validate, $state, $http, $location, $timeout) {
     ngNotify.config({
         theme: 'pure',
         position: 'top',
@@ -22,13 +22,15 @@ angular.module("oxymoron.notifier", [])
         <% end %>
 
         if (res.data.redirect_to_url) {
-      		console.log("Redirect to: " + res.data.redirect_to_url)
-    	    $location.url(res.data.redirect_to_url);
-    		}
-	      else if (res.data.reload_to_url) {
-		      console.log("Reload to: " + res.data.reload_to_url)
-	        window.location = res.data.reload_to_url
-		    }
+          $timeout(function() {
+            console.log("Redirect to: " + res.data.redirect_to_url)
+            $location.url(res.data.redirect_to_url);
+          })
+  		  }
+        else if (res.data.reload_to_url) {
+  	      console.log("Reload to: " + res.data.reload_to_url)
+          window.location = res.data.reload_to_url
+        }
         else if (res.data.redirect_to) {
           $state.go(res.data.redirect_to, res.data.redirect_options || {});
         }
@@ -47,5 +49,4 @@ angular.module("oxymoron.notifier", [])
       $rootScope.notify_callback('error', res)
     })
 
-
-  }])
+}])
