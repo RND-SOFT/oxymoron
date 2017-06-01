@@ -20,22 +20,28 @@ angular.module("oxymoron.services.validate", [])
 
 
       angular.forEach(errors, function(errors_array, key) {
-        var form_key = form+'['+key+']';
-        try {
-          if ($form[form_key]) {
-            $form[form_key].$setTouched();
-            $form[form_key].$setDirty();
-            $form[form_key].$setValidity('server', false);
+        var form_key1 = form+'[' + key + ']';
+        var form_key2 = form+'[' + "'" + key + "'" + ']';
+
+        angular.forEach([form_key1, form_key2], function(form_key) {
+          try {
+            if ($form[form_key]) {
+              $form[form_key].$setTouched();
+              $form[form_key].$setDirty();
+              $form[form_key].$setValidity('server', false);
+            }
+            
+            angular
+              .element(document.querySelector('[name="'+form_key+'"]'))
+              .parent()
+              .append('<div class="rails-errors" ng-messages="'+form_key+'.$error"><div ng-message="server">'+errors_array[0]+'</div></div>')
+          } catch(e) {
+            console.log(e)
+            console.warn('Element with name ' + form_key + ' not found for validation.')
           }
-          
-          angular
-            .element(document.querySelector('[name="'+form_key+'"]'))
-            .parent()
-            .append('<div class="rails-errors" ng-messages="'+form_key+'.$error"><div ng-message="server">'+errors_array[0]+'</div></div>')
-        } catch(e) {
-          console.log(e)
-          console.warn('Element with name ' + form_key + ' not found for validation.')
-        }
+        });
+
+
       });
     };
   }])
