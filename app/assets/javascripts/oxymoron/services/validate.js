@@ -26,7 +26,7 @@ angular.module("oxymoron.services.validate", [])
         keys.push(form+'[' + key + ']');
         keys.push(form+'[' + "'" + key + "'" + ']');
 
-        var split = key.split('.')
+        var split = (key + '').split('.')
         if (split.length == 2) {
           var k = split[0]
           var v = split[1]
