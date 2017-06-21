@@ -20,10 +20,23 @@ angular.module("oxymoron.services.validate", [])
 
 
       angular.forEach(errors, function(errors_array, key) {
-        var form_key1 = form+'[' + key + ']';
-        var form_key2 = form+'[' + "'" + key + "'" + ']';
 
-        angular.forEach([form_key1, form_key2], function(form_key) {
+        var keys = [];
+
+        keys.push(form+'[' + key + ']');
+        keys.push(form+'[' + "'" + key + "'" + ']');
+
+        var split = key.split('.')
+        if (split.length == 2) {
+          var k = split[0]
+          var v = split[1]
+
+          keys.push(form+'[' + k + '_attributes' + ']' + '[' + v + ']')
+          keys.push(form+"['" + k + '_attributes' + "']" + "['" + v + "']")
+        }
+
+
+        angular.forEach(keys, function(form_key) {
           try {
             if ($form[form_key]) {
               $form[form_key].$setTouched();
