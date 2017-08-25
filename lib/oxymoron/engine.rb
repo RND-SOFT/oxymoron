@@ -25,7 +25,8 @@ module Oxymoron
     end
 
     initializer 'oxymoron.csrf' do |app|
-      ActiveSupport.on_load(:action_controller) do
+      component_name = "action_controller#{Rails.version =~ /^5.[^0]/ ? '_base' : ''}"
+      ActiveSupport.on_load(component_name) do
         include ::Oxymoron::Concern
       end
     end
