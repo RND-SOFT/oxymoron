@@ -68,7 +68,11 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
   protected
     def ng_model method = nil
       object_name = @object_name.to_s.gsub(/\[([\w]+)\]/, "['\\1']")
-      object_name.gsub!(/'(#{@options[:child_index]})'/, "\\1") if @options[:child_index]
+
+      get_all_child_indexes.each do |index|
+        object_name.gsub!(/'(#{index})'/, "\\1")
+      end
+
       prefix = @options[:prefix] || 'ctrl' rescue "ctrl"
 
       if method
@@ -82,5 +86,40 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
       options = options.with_indifferent_access
       options['ng-model'] || ng_model(options[:field] || (options[:multiple] ? "#{method}_ids" : method))
     end
+
+    #Рассчитывает oxymoron-совместимый id, основываясь на ng-model
+    def compute_id method, options = {}
+      model = compute_ng_model(method, options)
+      id = model.gsub(/[\[\]\.\,\'\"]+/, '_').gsub('___', '_').gsub('__', '_').gsub(/^_/, '').gsub(/_$/, '')
+
+      get_all_child_indexes.each do |index|
+        id.gsub!(/_(#{index})_/, "_{{\\1}}_")
+      end
+
+      id
+    end
+
+    #Локализатор который пытается использовать перевод из родителя
+    def i18n method
+      @object.class.human_attribute_name(method)
+    rescue
+      record_name = object_name.split('][').last.gsub(/[^\w]/, '') rescue nil
+      options[:parent_builder].object.class.human_attribute_name("#{record_name}/#{method}") rescue method
+    end
+
+    #Все значения :child_index для всех вышележащих fields_for
+    def get_all_child_indexes
+      get_parent_builders(self).map {|b| b.options[:child_index]}.compact
+    end
+
+    def get_parent_builders builder
+      if builder.options[:parent_builder]
+        get_parent_builders(builder.options[:parent_builder])
+      else
+        []
+      end + [builder]
+    end
+
+
 
 end
