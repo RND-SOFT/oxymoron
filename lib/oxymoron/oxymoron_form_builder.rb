@@ -89,7 +89,7 @@ class OxymoronFormBuilder < ActionView::Helpers::FormBuilder
 
     #Рассчитывает oxymoron-совместимый id, основываясь на ng-model
     def compute_id method, options = {}
-      model = compute_ng_model(method, options)
+      model = compute_ng_model(method, options) + "_#{options[:value]}"
       id = model.gsub(/[\[\]\.\,\'\"]+/, '_').gsub('___', '_').gsub('__', '_').gsub(/^_/, '').gsub(/_$/, '')
 
       get_all_child_indexes.each do |index|
