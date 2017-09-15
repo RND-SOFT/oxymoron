@@ -47,6 +47,10 @@ angular.module("oxymoron.directives.formErrors", []).directive('formErrors', [
               return f[key];
             }), form);
 
+            if (!form_ctrl) {
+              return
+            }
+
             _.each(o.errors, function(v, k) {
               var field;
               if (field = form_ctrl[k]) {
