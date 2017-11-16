@@ -24,6 +24,7 @@ angular.module("oxymoron.notifier", [])
         if (res.data.redirect_to_url) {
           $timeout(function() {
             console.log("Redirect to: " + res.data.redirect_to_url)
+            $location.replace();
             $location.url(res.data.redirect_to_url);
           })
   		  }
