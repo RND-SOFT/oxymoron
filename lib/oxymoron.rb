@@ -107,11 +107,7 @@ module Oxymoron
     def generate file
       template = ERB.new File.read(File.expand_path("../../app/assets/javascripts/oxymoron/#{file}", __FILE__)), nil, "%"
 
-      if Rails.env.production?
-        return Uglifier.new(output: { comments: :all }).compile(template.result(binding))
-      else
-        return template.result(binding)
-      end
+      return template.result(binding)
     end
 
     def render_oxymoron_assets asset_name
