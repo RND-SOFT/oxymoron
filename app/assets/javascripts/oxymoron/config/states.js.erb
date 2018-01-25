@@ -28,7 +28,7 @@ angular.module("oxymoron.config.states", [])
           var actionNames = angular.isArray(actionNames) ? actionNames : [actionNames];
           
           if (actionNames.indexOf(action)!=-1) {
-            callback(angular.copy($stateParams));
+            callback(angular.copy($stateParams), action);
           }
         } catch (e) {
           console.error(e);
