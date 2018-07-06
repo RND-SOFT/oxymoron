@@ -7,7 +7,13 @@ module Oxymoron
     end
 
     def set_xsrf_token_cookie
-      cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?
+      if protect_against_forgery?
+        cookies['XSRF-TOKEN'] = {
+          value: form_authenticity_token,
+          secure: Rails.configuration.session_options[:secure],
+          httponly: false
+        }
+      end
     end
 
     def verified_request?
