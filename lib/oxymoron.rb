@@ -67,13 +67,13 @@ module Oxymoron
       if route.defaults[:action] == 'show'
         path = route.path.spec.to_s.gsub('(.:format)', '')
         @resources[route.name.camelize] = {
-          url: path,
+          url: "$http.defaults.subdomain + '#{path}'",
           default_params: Hash[route.path.required_names.map{|name| [name, '@'+name]}]
         }
 
         for_hash = {
-          'new'     => {method: 'GET', url: "#{path}/new.json" },
-          'edit'    => {method: 'GET', url: "#{path}/edit.json"},
+          'new'     => {method: 'GET', url: "$http.defaults.subdomain + '#{path}/new.json'" },
+          'edit'    => {method: 'GET', url: "$http.defaults.subdomain + '#{path}/edit.json'"},
           'update'  => {method: 'PUT'},
           'create'  => {method: 'POST'},
           'destroy' => {method: 'DELETE'}
@@ -88,7 +88,7 @@ module Oxymoron
             if (current_route_path.start_with?(base_path))
               route_request_methods(route).each do |meth|
                 for_hash[route.defaults[:action]] ||= {
-                  url: route.path.spec.to_s.gsub('(.:format)', '.json'),
+                  url: "$http.defaults.subdomain + '#{route.path.spec.to_s.gsub('(.:format)', '.json')}'",
                   isArray: route.defaults[:is_array],
                   method: /GET|POST|PUT|PATCH|DELETE/.match(meth.to_s).to_s
                 }

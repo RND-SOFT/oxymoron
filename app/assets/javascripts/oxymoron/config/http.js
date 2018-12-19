@@ -5,5 +5,6 @@ angular.module("oxymoron.config.http", [])
     */
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'AngularXMLHttpRequest';
     $httpProvider.defaults.paramSerializer = '$httpParamSerializerJQLike';
+    $httpProvider.defaults.subdomain = '';
   }])
 
